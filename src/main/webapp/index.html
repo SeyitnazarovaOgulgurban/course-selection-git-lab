@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>课程大厅 · CourseFlow 选课系统</title>
+  <style>
+    :root{--navy:#15213b;--ink:#23324b;--muted:#748198;--blue:#4567ed;--light:#eff3ff;--line:#e8edf5;--bg:#f5f7fb;--white:#fff;--green:#0c956b;--red:#ce4550}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px}button,input{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
+    .topbar{height:74px;background:#fff;border-bottom:1px solid var(--line)}.top-inner,.container{max-width:1180px;margin:auto;padding:0 26px}.top-inner{height:100%;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:11px;font-size:20px;letter-spacing:-.5px;font-weight:800;color:var(--navy)}.brand-icon{display:grid;place-items:center;width:37px;height:37px;border-radius:11px;background:var(--blue);color:#fff;font-size:21px;font-weight:800}.brand small{font-size:11px;font-weight:600;letter-spacing:1px;color:#93a0b5;margin-left:4px}.nav{display:flex;align-items:center;gap:12px}.nav a{padding:10px 16px;border-radius:10px;color:#68768f;font-weight:600}.nav a.active{background:var(--light);color:var(--blue)}.nav .counter{margin-left:6px;display:inline-block;min-width:21px;padding:2px 6px;background:#e6ebff;color:var(--blue);border-radius:7px;text-align:center;font-size:11px}
+    .container{padding-top:34px;padding-bottom:42px}.hero{background:linear-gradient(108deg,#202f67 0%,#395dd2 67%,#6381f3 100%);color:white;border-radius:23px;min-height:232px;padding:39px 46px;display:flex;justify-content:space-between;align-items:center;overflow:hidden;position:relative}.hero-content{z-index:1}.eyebrow{font-size:12px;letter-spacing:1.6px;font-weight:800;color:#bcd0ff}.hero h1{font-size:34px;letter-spacing:.2px;margin:14px 0 12px}.hero p{max-width:520px;line-height:1.85;font-size:14px;color:#e3eaff;margin:0}.hero-art{width:250px;height:170px;position:relative;flex:none;z-index:1}.glow{position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.07);right:-105px;top:-55px}.book{position:absolute;background:#fff;box-shadow:0 18px 32px rgba(11,29,86,.2);border-radius:14px;transform:rotate(11deg);height:138px;width:106px;right:69px;top:16px}.book:before{content:"";position:absolute;top:31px;left:17px;right:17px;height:8px;background:#afbefd;border-radius:5px;box-shadow:0 22px #d9e1ff,0 44px #d9e1ff}.book.two{height:133px;right:12px;top:31px;transform:rotate(26deg);background:#bbccff}.book.two:before{background:#6c88ef;box-shadow:0 22px #8fa5f2,0 44px #8fa5f2}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin:22px 0 34px}.stat{background:#fff;border:1px solid var(--line);border-radius:17px;padding:19px 22px;display:flex;gap:14px;align-items:center}.stat-icon{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:#eef2ff;font-size:22px}.stat-icon.green{background:#e8f8f1}.stat-icon.orange{background:#fff2e4}.stat-icon.purple{background:#f0edff}.stat-label{font-size:12px;color:var(--muted);margin-bottom:5px}.stat-number{font-size:25px;font-weight:800;letter-spacing:-.5px;color:var(--navy)}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:20px}.section-head h2{margin:0 0 7px;font-size:23px;color:var(--navy)}.section-head p{margin:0;color:var(--muted);font-size:13px}.api{display:inline-flex;align-items:center;gap:7px;background:#eaf6f0;color:#18745a;border-radius:8px;padding:7px 10px;font-weight:700;font-size:11px;white-space:nowrap}.dot{width:7px;height:7px;border-radius:50%;background:#20b981}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}.filters{display:flex;flex-wrap:wrap;gap:8px}.filter{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 15px;color:#6b7890;font-weight:650}.filter.active{color:#fff;background:var(--blue);border-color:var(--blue);box-shadow:0 4px 10px rgba(64,98,222,.14)}.search{position:relative;display:flex;align-items:center;max-width:340px;flex:1 1 240px}.search span{position:absolute;left:14px;font-size:19px;color:#94a0b3}.search input{width:100%;height:42px;border:1px solid #dde4ee;border-radius:11px;background:#fff;padding:0 12px 0 40px;outline:none;color:var(--ink)}.search input:focus{border-color:#849cff;box-shadow:0 0 0 3px #e9eeff}.results{font-size:12px;color:#8995a7;margin:-6px 0 15px}
+    .course-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.course{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 6px 19px rgba(40,59,95,.027);display:flex;flex-direction:column;gap:17px;min-width:0;transition:transform .18s,box-shadow .18s}.course:hover{transform:translateY(-2px);box-shadow:0 13px 28px rgba(40,59,95,.08)}.course-header{display:flex;justify-content:space-between;gap:10px;align-items:center}.course-id{font-size:12px;font-weight:800;letter-spacing:.6px;color:#929fb3}.tag{padding:6px 10px;border-radius:7px;font-size:11px;font-weight:700;background:#eaf0ff;color:#5871cb}.tag.选修{background:#e9f8ee;color:#27986b}.tag.实践{background:#fff2e2;color:#b77c35}.tag.通识{background:#f3edff;color:#8a68c5}.course h3{font-size:20px;letter-spacing:-.2px;margin:1px 0 8px;color:var(--navy)}.desc{margin:0;color:#8a95a7;font-size:12px;line-height:1.8;min-height:20px}.details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px 10px;border-top:1px solid #f0f3f8;padding-top:16px}.detail{font-size:12px;color:#708098;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.detail strong{font-weight:650;color:#3c4b64}.course-bottom{display:flex;justify-content:space-between;gap:12px;align-items:center}.credit{font-size:12px;color:#8e9bae}.credit b{font-size:21px;color:var(--navy);margin-right:5px}.enroll-btn{background:var(--blue);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:750;padding:12px 23px;min-width:114px}.enroll-btn:hover:not(:disabled){background:#3554d5}.enroll-btn:disabled{cursor:default;opacity:.72}.enroll-btn.selected{background:#eaf7f0;color:var(--green);opacity:1}
+    .empty{grid-column:1/-1;background:#fff;border:1px dashed #d7dfeb;border-radius:16px;text-align:center;padding:53px 20px;color:#8996aa}.empty b{display:block;color:var(--navy);font-size:18px;margin-bottom:8px}.notice{border:1px solid #e1e8f5;background:#eff4ff;border-radius:13px;color:#617396;padding:15px 18px;line-height:1.7;font-size:12px;margin-top:26px}.footer{text-align:center;color:#a7b2c2;font-size:12px;margin:32px 0 0}.toast{position:fixed;right:26px;bottom:26px;max-width:min(420px,calc(100vw - 40px));padding:15px 20px;border-radius:12px;background:#24334f;color:#fff;box-shadow:0 12px 32px #1e2a4650;z-index:20;opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translateY(0)}.toast.error{background:#b83b4b}
+    @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.hero-art{opacity:.55}.course-grid{grid-template-columns:1fr}}@media(max-width:570px){.top-inner,.container{padding-left:16px;padding-right:16px}.brand{font-size:17px}.brand small{display:none}.nav{gap:0}.nav a{padding:9px 8px;font-size:12px}.hero{min-height:auto;padding:34px 26px}.hero h1{font-size:26px}.hero-art{display:none}.stats{gap:9px;margin:16px 0 28px}.stat{padding:14px 12px;gap:9px}.stat-icon{width:38px;height:38px}.stat-number{font-size:21px}.toolbar{align-items:stretch}.search{max-width:none;flex-basis:100%}.section-head h2{font-size:21px}.api{display:none}.course{padding:20px}}
+  </style>
+</head>
+<body>
+  <header class="topbar"><div class="top-inner">
+    <a class="brand" href="index.html"><span class="brand-icon">C</span>CourseFlow <small>选课平台</small></a>
+    <nav class="nav" aria-label="主导航"><a class="active" href="index.html">课程大厅</a><a href="my-courses.html">我的课程<span class="counter" id="nav-count">0</span></a></nav>
+  </div></header>
+  <main class="container">
+    <section class="hero"><div class="hero-content"><div class="eyebrow">COURSE SELECTION · 2026</div><h1>探索课程，开启新学期</h1><p>浏览本学期课程，合理安排学习计划。轻松选课、自动检测时间冲突，让学习更有序。</p></div><div class="hero-art" aria-hidden="true"><div class="glow"></div><div class="book two"></div><div class="book"></div></div></section>
+    <section class="stats" aria-label="选课概况"><div class="stat"><div class="stat-icon">📚</div><div><div class="stat-label">开放课程</div><div class="stat-number" id="course-count">—</div></div></div><div class="stat"><div class="stat-icon green">✓</div><div><div class="stat-label">已选课程</div><div class="stat-number" id="selected-count">0</div></div></div><div class="stat"><div class="stat-icon orange">✦</div><div><div class="stat-label">已选学分</div><div class="stat-number" id="credit-count">0.0</div></div></div><div class="stat"><div class="stat-icon purple">◈</div><div><div class="stat-label">选课上限</div><div class="stat-number" id="limit-count">5</div></div></div></section>
+    <section aria-label="课程列表"><div class="section-head"><div><h2>全部课程</h2><p>选择你感兴趣的课程，开始规划个人课表</p></div><div class="api"><span class="dot"></span>Servlet API · GET / POST</div></div>
+      <div class="toolbar"><div class="filters" id="filters"><button type="button" class="filter active" data-filter="全部课程">全部课程</button><button type="button" class="filter" data-filter="专业核心">专业核心</button><button type="button" class="filter" data-filter="专业选修">专业选修</button><button type="button" class="filter" data-filter="实践课程">实践课程</button><button type="button" class="filter" data-filter="通识课程">通识课程</button></div><label class="search"><span aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="搜索课程、教师、编号…" aria-label="搜索课程"></label></div>
+      <div class="results" id="result-count" aria-live="polite">正在加载课程…</div><div class="course-grid" id="course-grid"><div class="empty">正在从 Servlet 获取课程数据…</div></div>
+    </section>
+    <aside class="notice">💡 <b>演示提示：</b>课程数据由 Java Servlet 提供，选课信息暂存在当前浏览器会话（HttpSession）。同一时段的课程不可重复选择，最多选 5 门。刷新页面不会丢失选课；会话到期或重启服务器后将重置。</aside>
+    <div class="footer">CourseFlow · Java Web Servlet 教学项目 · 无数据库 / 无第三方框架</div>
+  </main><div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>
+    'use strict';
+    // HTML 页面是静态文件；数据必须通过 fetch 从后端 Servlet 获取。
+    const courseGrid = document.getElementById('course-grid');
+    const state = { courses: [], selectedIds: new Set(), category: '全部课程', keyword: '', pending: null, ready: false };
+    let toastTimer;
+    const weekdayNames = ['','周一','周二','周三','周四','周五','周六','周日'];
+    const html = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    async function api(url, options) {
+      const response = await fetch(url, { credentials: 'same-origin', ...options });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.message || `请求失败 (${response.status})`);
+      return result;
+    }
+    function toast(message, error = false) {
+      const node = document.getElementById('toast');
+      node.textContent = message; node.className = 'toast show' + (error ? ' error' : '');
+      clearTimeout(toastTimer); toastTimer = setTimeout(() => { node.className = 'toast'; }, 3200);
+    }
+    function updateStats(data) {
+      state.selectedIds = new Set(data.selectedIds);
+      document.getElementById('selected-count').textContent = data.count;
+      document.getElementById('nav-count').textContent = data.count;
+      document.getElementById('credit-count').textContent = Number(data.totalCredits).toFixed(1);
+      document.getElementById('limit-count').textContent = data.limit;
+    }
+    function render() {
+      if (!state.ready) return;
+      const courses = state.courses.filter(c =>
+        (state.category === '全部课程' || c.category === state.category) &&
+        [c.name,c.teacher,c.id,c.description].some(x => x.toLowerCase().includes(state.keyword))
+      );
+      document.getElementById('result-count').textContent = `共找到 ${courses.length} 门课程`;
+      if (!courses.length) {
+        courseGrid.innerHTML = '<div class="empty"><b>暂时没有找到匹配的课程</b>请试试其他搜索关键词或分类。</div>';
+        return;
+      }
+      courseGrid.innerHTML = courses.map(c => {
+        const selected = state.selectedIds.has(c.id);
+        const pending = state.pending === c.id;
+        const kind = c.category === '专业选修' ? '选修' : c.category === '实践课程' ? '实践' : c.category === '通识课程' ? '通识' : '';
+        return `<article class="course">
+          <div class="course-header"><span class="course-id">${html(c.id)}</span><span class="tag ${kind}">${html(c.category)}</span></div>
+          <div><h3>${html(c.name)}</h3><p class="desc">${html(c.description)}</p></div>
+          <div class="details"><span class="detail">♙　教师：<strong>${html(c.teacher)}</strong></span><span class="detail">▦　时间：<strong>${weekdayNames[c.weekday] || ''} ${c.startPeriod}–${c.endPeriod} 节</strong></span><span class="detail">⌖　地点：<strong>${html(c.room)}</strong></span><span class="detail">▤　课程编号：<strong>${html(c.id)}</strong></span></div>
+          <div class="course-bottom"><div class="credit"><b>${Number(c.credits).toFixed(1)}</b>学分</div><button type="button" class="enroll-btn ${selected ? 'selected' : ''}" data-id="${html(c.id)}" ${selected || pending || state.pending ? 'disabled' : ''}>${pending ? '提交中…' : selected ? '✓ 已选此课' : '+ 立即选课'}</button></div>
+        </article>`;
+      }).join('');
+    }
+    async function enroll(courseId) {
+      if (state.pending || state.selectedIds.has(courseId)) return;
+      state.pending = courseId; render();
+      try {
+        const body = new URLSearchParams({action:'add', courseId});
+        const result = await api('api/enrollments', {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body});
+        updateStats(result.data); toast(result.message);
+      } catch (error) { toast(error.message, true); }
+      finally { state.pending = null; render(); }
+    }
+    document.getElementById('filters').addEventListener('click', event => {
+      const button = event.target.closest('[data-filter]'); if (!button) return;
+      state.category = button.dataset.filter;
+      document.querySelectorAll('.filter').forEach(b => b.classList.toggle('active', b === button));
+      render();
+    });
+    document.getElementById('search-input').addEventListener('input', event => {
+      state.keyword = event.target.value.trim().toLowerCase(); render();
+    });
+    courseGrid.addEventListener('click', event => {
+      const button = event.target.closest('button[data-id]'); if (button) enroll(button.dataset.id);
+    });
+    async function init() {
+      try {
+        const [catalog, enrollment] = await Promise.all([api('api/courses'), api('api/enrollments')]);
+        state.courses = catalog.courses;
+        state.ready = true;
+        document.getElementById('course-count').textContent = state.courses.length;
+        updateStats(enrollment.data); render();
+      } catch (error) {
+        document.getElementById('result-count').textContent = '加载失败';
+        courseGrid.innerHTML = '<div class="empty"><b>无法连接到后端 Servlet</b>请确认已通过 Tomcat 运行项目，而不是直接双击 HTML 文件。</div>';
+        toast('连接服务器失败：' + error.message, true);
+      }
+    }
+    init();
+  </script>
+</body>
+</html>
